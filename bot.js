@@ -1,9 +1,19 @@
 import 'dotenv/config';
+import http from 'http';
 import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
 
+const PORT = process.env.PORT || 3000;
+
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('Vault Radio Live Bot is running');
+}).listen(PORT, () => {
+  console.log(`Web server listening on port ${PORT}`);
+});
+
 const CHANNELS = [
-  "1485016692613710057", // Vault Radio
-  "1488349767233704127"  // Secondary Discord
+  "1485016692613710057",
+  "1488349767233704127"
 ];
 
 const API_URL = "https://a13.asurahosting.com/api/nowplaying/366";
@@ -53,7 +63,6 @@ async function checkLive() {
 
           await channel.send({ embeds: [embed] });
           console.log(`Posted to channel: ${channelId}`);
-
         } catch (err) {
           console.error(`Failed to post to channel ${channelId}:`, err.message);
         }
@@ -66,7 +75,6 @@ async function checkLive() {
     if (!isLive) {
       lastStreamer = null;
     }
-
   } catch (error) {
     console.error("Error checking live status:", error);
   }
