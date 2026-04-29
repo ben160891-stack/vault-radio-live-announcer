@@ -1,17 +1,13 @@
 {
-  "name": "vault-live",
+  "name": "vault-radio-live-announcer",
   "version": "1.0.0",
-  "description": "",
+  "type": "module",
   "main": "bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node bot.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
   "dependencies": {
-    "discord.js": "^14.26.3",
-    "dotenv": "^17.4.2"
+    "discord.js": "^14.0.0",
+    "dotenv": "^16.0.0"
   }
 }
