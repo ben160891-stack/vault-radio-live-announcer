@@ -95,7 +95,7 @@ if (!token) {
 
 console.log("Token found, length:", token.length);
 
-client.once(Events.ClientReady, () => {
+client.once("ready", () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
   checkLive();
   setInterval(checkLive, 60000);
