@@ -25,7 +25,7 @@ const djImages = {
   "DJ DEAN": "https://cdn.discordapp.com/attachments/1388592743877578854/1499109667224162455/dj_dean.png"
 };
 
-const defaultImage = "https://cdn.discordapp.com/attachments/1388592743877578854/1499109621212905644/benj.png";
+const defaultImage = djImages["Benj"];
 
 let lastStreamer = null;
 
@@ -80,23 +80,27 @@ async function checkLive() {
       lastStreamer = null;
     }
   } catch (error) {
-    console.error("Error checking live status:", error);
+    console.error("Error checking live status:", error.message);
   }
 }
 
-client.once("ready", () => {
-  console.log(`Logged in as ${client.user.tag}`);
-  checkLive();
-  setInterval(checkLive, 60000);
-});
-
 console.log("Starting Discord bot login...");
 
-if (!process.env.DISCORD_TOKEN) {
+const token = process.env.DISCORD_TOKEN;
+
+if (!token) {
   console.error("DISCORD_TOKEN is missing!");
   process.exit(1);
 }
 
-client.login(process.env.DISCORD_TOKEN).catch((err) => {
+console.log("Token found, length:", token.length);
+
+client.on("ready", () => {
+  console.log(`✅ Logged in as ${client.user.tag}`);
+  checkLive();
+  setInterval(checkLive, 60000);
+});
+
+client.login(token.trim()).catch((err) => {
   console.error("Discord login failed:", err.message);
 });
