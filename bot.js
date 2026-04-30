@@ -26,8 +26,8 @@ const djImages = {
 };
 
 const defaultImage = djImages["Benj"];
-
 let lastStreamer = null;
+let started = false;
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds]
@@ -59,12 +59,6 @@ async function checkLive() {
       for (const channelId of CHANNELS) {
         try {
           const channel = await client.channels.fetch(channelId);
-
-          if (!channel) {
-            console.log(`Channel not found: ${channelId}`);
-            continue;
-          }
-
           await channel.send({ embeds: [embed] });
           console.log(`Posted to channel: ${channelId}`);
         } catch (err) {
@@ -72,7 +66,6 @@ async function checkLive() {
         }
       }
 
-      console.log(`${streamer} went live`);
       lastStreamer = streamer;
     }
 
@@ -83,6 +76,18 @@ async function checkLive() {
     console.error("Error checking live status:", error.message);
   }
 }
+
+function startBotLoop() {
+  if (started) return;
+  started = true;
+
+  console.log(`✅ Logged in as ${client.user.tag}`);
+  checkLive();
+  setInterval(checkLive, 60000);
+}
+
+client.once("ready", startBotLoop);
+client.once("clientReady", startBotLoop);
 
 console.log("Starting Discord bot login...");
 
@@ -95,12 +100,10 @@ if (!token) {
 
 console.log("Token found, length:", token.length);
 
-client.once("ready", () => {
-  console.log(`✅ Logged in as ${client.user.tag}`);
-  checkLive();
-  setInterval(checkLive, 60000);
-});
-
-client.login(token.trim()).catch((err) => {
-  console.error("Discord login failed:", err.message);
-});
+client.login(token.trim())
+  .then(() => {
+    console.log("Discord login request accepted.");
+  })
+  .catch((err) => {
+    console.error("Discord login failed:", err.message);
+  });
