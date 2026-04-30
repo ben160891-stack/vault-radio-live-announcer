@@ -84,7 +84,7 @@ async function checkLive() {
   }
 }
 
-client.once("clientReady", () => {
+client.once("ready", () => {
   console.log(`Logged in as ${client.user.tag}`);
   checkLive();
   setInterval(checkLive, 60000);
